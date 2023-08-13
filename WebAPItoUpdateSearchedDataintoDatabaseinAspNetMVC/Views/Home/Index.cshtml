@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/jquery/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#button2").click(function () {
+                var rollno = $("#txt1").val();
+                var sname = $("#txt2").val();
+                var fname = $("#txt3").val();
+                var mname = $("#txt4").val();
+                $.getJSON("/api/SearchData?updaterollno=" + rollno+"&sname="+sname+"&fname="+fname+"&mname="+mname, function (data) {
+                    $("#result1").text(data);
+                    $("#txt1").val("");
+                    $("#txt2").val("");
+                    $("#txt3").val("");
+                    $("#txt4").val("");
+                    $("#result").text("");
+                })
+
+            })
+
+            $("#button1").click(function () {
+                var rollno=$("#txt1").val();
+                var sname= $("#txt2").val();
+                var fname = $("#txt3").val();
+                var mname= $("#txt4").val();
+
+                $.getJSON("/api/SearchData?rollno=" + rollno, function (data) {
+
+                    if (data == "notfound")
+                    {
+                        $("#result").text("Roll Number Not Found");
+                        $("#txt2").val("");
+                        $("#txt3").val("");
+                        $("#txt4").val("");
+                        $("#button2").prop("disabled", true);
+                        $("#result1").text("");
+                    }
+                    else
+                    {
+                        $("#result").text("Roll Number Has Been Found");
+                        var splitdata = data.split("||");
+                        $("#txt2").val(splitdata[0]);
+                        $("#txt3").val(splitdata[1]);
+                        $("#txt4").val(splitdata[2]);
+                        $("#button2").prop("disabled", false);
+                        $("#result1").text("");
+                    }
+
+                })
+
+            })
+        })
+    </script>
+
+</head>
+<body>
+    <div>
+        
+        <h4>Implement WEB API to Search Data into Database Asp.Net MVC</h4>
+        <table border="1" bgcolor="skyblue" width="450" height="300">
+            <tr>
+                <td>Roll Number</td>
+                <td><input type="text" name="rollno" id="txt1" value="" />&nbsp;&nbsp;<input type="button" name="search" id="button1" value="Search" /><br /><span id="result" /></td>
+
+            </tr>
+            <tr>
+                <td>Student Name</td>
+                <td><input type="text" name="sname" id="txt2" value="" /></td>
+            </tr>
+            <tr>
+                <td>Father Name</td>
+                <td><input type="text" name="fname" id="txt3" value="" /></td>
+            </tr>
+            <tr>
+                <td>Mother Name</td>
+                <td><input type="text" name="mname" id="txt4" value="" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="button" name="update" id="button2" value="Update Data" disabled /><br /><span id="result1" /></td>
+            </tr>
+        </table>
+        <br />
+
+
+    </div>
+</body>
+</html>
